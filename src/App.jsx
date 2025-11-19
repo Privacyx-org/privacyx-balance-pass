@@ -309,7 +309,7 @@ function App() {
           maxWidth: "880px",
           width: "100%",
           borderRadius: "24px",
-          padding: "24px 24px 20px",
+          padding: "24px 24px 24px",
           background: "#101015",
           border: "1px solid rgba(255,255,255,0.06)",
           boxShadow: "0 24px 80px rgba(0,0,0,0.7)",
@@ -320,119 +320,180 @@ function App() {
           style={{
             display: "flex",
             justifyContent: "space-between",
-            gap: "12px",
+            gap: "16px",
             marginBottom: "24px",
-            alignItems: "center",
+            alignItems: "flex-start",
+            flexWrap: "wrap",
           }}
         >
           {/* Logo + title */}
-          <div>
+          <div
+            style={{
+              display: "flex",
+              alignItems: "flex-start",
+              gap: "12px",
+            }}
+          >
             <div
               style={{
+                width: "40px",
+                height: "40px",
+                borderRadius: "12px",
+                background: "#050509",
                 display: "flex",
                 alignItems: "center",
-                gap: "12px",
+                justifyContent: "center",
+                flexShrink: 0,
+                marginTop: "2px", // léger ajustement pour aligner optiquement avec le titre
               }}
             >
-              <div
+              <img
+                src="/logo-PRVX-copy.png"
+                alt="PrivacyX Logo"
                 style={{
-                  width: "40px",
-                  height: "40px",
-                  borderRadius: "12px",
-                  background: "#050509",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  flexShrink: 0,
+                  maxWidth: "26px",
+                  maxHeight: "26px",
+                  display: "block",
                 }}
-              >
-                <img
-                  src="/logo-PRVX-copy.png"
-                  alt="PrivacyX Logo"
-                  style={{
-                    maxWidth: "26px",
-                    maxHeight: "26px",
-                    display: "block",
-                  }}
-                />
-              </div>
+              />
+            </div>
 
+            <div>
               <h1
                 style={{
                   fontSize: "24px",
                   fontWeight: 600,
                   margin: 0,
+                  lineHeight: "1.1",
                 }}
               >
-                Privacyx Balance Pass (ZK Access)
+                PXP-101 : Privacyx Balance Pass (ZK Access)
               </h1>
-            </div>
-
-            <p
-              style={{
-                fontSize: "13px",
-                color: "#9ca3af",
-                marginTop: "6px",
-              }}
-            >
-              Prove that you meet the balance requirement without revealing your
-              address or exact holdings.
-            </p>
-
-            <div
-              style={{
-                marginTop: "10px",
-                display: "flex",
-                alignItems: "center",
-                gap: "8px",
-                fontSize: "11px",
-                color: networkOk ? "#4befa0" : "#f97373",
-              }}
-            >
-              <span
+              <p
                 style={{
-                  width: "8px",
-                  height: "8px",
-                  borderRadius: "999px",
-                  backgroundColor: networkOk ? "#4befa0" : "#f97373",
+                  fontSize: "13px",
+                  color: "#9ca3af",
+                  marginTop: "6px",
                 }}
-              />
-              <span>{networkLabel}</span>
+              >
+                Prove that you meet the balance requirement without revealing your
+                address or exact holdings.
+              </p>
+
+              <div
+                style={{
+                  marginTop: "10px",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "8px",
+                  fontSize: "11px",
+                  color: networkOk ? "#4befa0" : "#f97373",
+                }}
+              >
+                <span
+                  style={{
+                    width: "8px",
+                    height: "8px",
+                    borderRadius: "999px",
+                    backgroundColor: networkOk ? "#4befa0" : "#f97373",
+                  }}
+                />
+                <span>{networkLabel}</span>
+              </div>
             </div>
           </div>
 
-          {/* Wallet + contract link */}
-          <div style={{ textAlign: "right" }}>
-            <button
-              onClick={connectWallet}
+          {/* Wallet + links */}
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "flex-end",
+              gap: "6px",
+              flexShrink: 0,
+            }}
+          >
+            {/* Single row: all 4 buttons, in requested order */}
+            <div
               style={{
-                padding: "8px 16px",
-                borderRadius: "999px",
-                border: "1px solid rgba(255,255,255,0.1)",
-                background: account ? "rgba(75,239,160,0.08)" : "#4befa0",
-                color: account ? "#4befa0" : "#020617",
-                fontSize: "13px",
-                fontWeight: 500,
-                cursor: "pointer",
-                whiteSpace: "nowrap",
-                marginBottom: "6px",
+                display: "flex",
+                gap: "8px",
+                justifyContent: "flex-end",
+                flexWrap: "wrap",
               }}
             >
-              {account ? shortAddr(account) : "Connect Wallet"}
-            </button>
+              <button
+                onClick={connectWallet}
+                style={{
+                  padding: "6px 12px",
+                  borderRadius: "999px",
+                  border: "1px solid rgba(255,255,255,0.1)",
+                  background: account ? "rgba(75,239,160,0.08)" : "#4befa0",
+                  color: account ? "#4befa0" : "#020617",
+                  fontSize: "11px",
+                  fontWeight: 500,
+                  cursor: "pointer",
+                  whiteSpace: "nowrap",
+                }}
+              >
+                {account ? shortAddr(account) : "Connect Wallet"}
+              </button>
 
-            {BALANCE_ACCESS_ADDRESS && (
-              <div style={{ fontSize: "11px" }}>
+              {BALANCE_ACCESS_ADDRESS && (
                 <a
                   href={`${ETHERSCAN_BASE}/address/${BALANCE_ACCESS_ADDRESS}`}
                   target="_blank"
                   rel="noreferrer"
-                  style={{ color: "#9ca3af", textDecoration: "underline" }}
+                  style={{
+                    fontSize: "11px",
+                    padding: "6px 10px",
+                    borderRadius: "999px",
+                    border: "1px solid rgba(148,163,184,0.4)",
+                    color: "#e5e7eb",
+                    textDecoration: "none",
+                    background: "#111118",
+                    whiteSpace: "nowrap",
+                  }}
                 >
                   View contract on Etherscan
                 </a>
-              </div>
-            )}
+              )}
+
+              <a
+                href="https://github.com/Privacyx-org/privacyx-balance-pass/blob/main/PXP-101.md"
+                target="_blank"
+                rel="noreferrer"
+                style={{
+                  fontSize: "11px",
+                  padding: "6px 10px",
+                  borderRadius: "999px",
+                  border: "1px solid rgba(148,163,184,0.4)",
+                  color: "#e5e7eb",
+                  textDecoration: "none",
+                  background: "rgba(15,23,42,0.9)",
+                  whiteSpace: "nowrap",
+                }}
+              >
+                View PXP-101 spec
+              </a>
+
+              <a
+                href="#integrate"
+                style={{
+                  fontSize: "11px",
+                  padding: "6px 10px",
+                  borderRadius: "999px",
+                  border: "none",
+                  color: "#020617",
+                  textDecoration: "none",
+                  background: "#4befa0",
+                  fontWeight: 500,
+                  whiteSpace: "nowrap",
+                }}
+              >
+                Integrate in your dApp
+              </a>
+            </div>
           </div>
         </div>
 
@@ -507,6 +568,7 @@ function App() {
             display: "grid",
             gridTemplateColumns: "minmax(0, 3fr) minmax(0, 2fr)",
             gap: "16px",
+            marginBottom: "24px",
           }}
         >
           {/* Action zone */}
@@ -715,6 +777,166 @@ function App() {
                 ))}
               </div>
             )}
+          </div>
+        </div>
+
+        {/* Integration section */}
+        <div
+          id="integrate"
+          style={{
+            marginTop: "8px",
+            padding: "16px",
+            borderRadius: "16px",
+            background: "#15151d",
+            border: "1px solid rgba(148,163,184,0.18)",
+          }}
+        >
+          <h2
+            style={{
+              fontSize: "16px",
+              fontWeight: 500,
+              marginBottom: "8px",
+            }}
+          >
+            3. Integration guide (PXP-101)
+          </h2>
+          <p
+            style={{
+              fontSize: "13px",
+              color: "#9ca3af",
+              marginBottom: "10px",
+            }}
+          >
+            Use PXP-101 as a plug-and-play balance-based privacy gate in your dApp or
+            protocol. You can start with event-based integration or prepare for
+            direct on-chain checks.
+          </p>
+
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
+              gap: "14px",
+              marginTop: "4px",
+            }}
+          >
+            {/* Off-chain */}
+            <div>
+              <h3
+                style={{
+                  fontSize: "13px",
+                  fontWeight: 500,
+                  marginBottom: "6px",
+                }}
+              >
+                Option A — Off-chain / backend
+              </h3>
+              <ul
+                style={{
+                  margin: 0,
+                  paddingLeft: "16px",
+                  fontSize: "12px",
+                  color: "#9ca3af",
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: "4px",
+                }}
+              >
+                <li>
+                  Let users complete the ZK flow via{" "}
+                  <a
+                    href="https://pass.privacyx.tech"
+                    target="_blank"
+                    rel="noreferrer"
+                    style={{ color: "#e5e7eb", textDecoration: "underline" }}
+                  >
+                    pass.privacyx.tech
+                  </a>
+                  .
+                </li>
+                <li>
+                  Monitor <code>AccessGranted</code> events on{" "}
+                  <code>0x8333b589ad3A8A5fCe735631e8EDf693C6AE0472</code>.
+                </li>
+                <li>
+                  Use <code>caller</code>, <code>nullifier</code>, and{" "}
+                  <code>root</code> as inputs to your private access logic.
+                </li>
+              </ul>
+            </div>
+
+            {/* On-chain */}
+            <div>
+              <h3
+                style={{
+                  fontSize: "13px",
+                  fontWeight: 500,
+                  marginBottom: "6px",
+                }}
+              >
+                Option B — On-chain / contracts
+              </h3>
+              <ul
+                style={{
+                  margin: 0,
+                  paddingLeft: "16px",
+                  fontSize: "12px",
+                  color: "#9ca3af",
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: "4px",
+                }}
+              >
+                <li>
+                  Consume <code>AccessGranted</code> events or nullifiers as
+                  one-time tickets.
+                </li>
+                <li>
+                  Gate features based on “has a valid PXP-101 pass” without
+                  revealing balances.
+                </li>
+                <li>
+                  Future SDK versions will expose helpers like{" "}
+                  <code>px.balancePass.requireAccess(...)</code>.
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <div
+            style={{
+              marginTop: "12px",
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              gap: "8px",
+              flexWrap: "wrap",
+            }}
+          >
+            <span
+              style={{
+                fontSize: "11px",
+                color: "#6b7280",
+              }}
+            >
+              Full specification: PXP-101 · Privacyx Balance Pass.
+            </span>
+            <a
+              href="https://github.com/Privacyx-org/privacyx-balance-pass"
+              target="_blank"
+              rel="noreferrer"
+              style={{
+                fontSize: "11px",
+                padding: "6px 10px",
+                borderRadius: "999px",
+                border: "1px solid rgba(148,163,184,0.4)",
+                color: "#e5e7eb",
+                textDecoration: "none",
+                background: "#111118",
+              }}
+            >
+              View repo & examples
+            </a>
           </div>
         </div>
       </div>
