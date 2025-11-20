@@ -808,8 +808,8 @@ function App() {
             }}
           >
             Use PXP-101 as a plug-and-play balance-based privacy gate in your dApp or
-            protocol. You can start with event-based integration or prepare for
-            direct on-chain checks.
+            protocol. You can start with event-based integration, direct on-chain
+            checks, or via the official Privacyx SDK.
           </p>
 
           <div
@@ -896,10 +896,83 @@ function App() {
                   revealing balances.
                 </li>
                 <li>
-                  Future SDK versions will expose helpers like{" "}
-                  <code>px.balancePass.requireAccess(...)</code>.
+                  Combine PXP-101 with your own on-chain logic or off-chain
+                  checks (rate limits, allowlists, etc.).
                 </li>
               </ul>
+            </div>
+
+            {/* SDK */}
+            <div>
+              <h3
+                style={{
+                  fontSize: "13px",
+                  fontWeight: 500,
+                  marginBottom: "6px",
+                }}
+              >
+                Option C — Via Privacyx SDK
+              </h3>
+              <p
+                style={{
+                  fontSize: "12px",
+                  color: "#9ca3af",
+                  marginBottom: "6px",
+                }}
+              >
+                Install the official SDK to read PXP-101 state and submit proofs
+                with a simple API:
+              </p>
+              <pre
+                style={{
+                  fontSize: "11px",
+                  background: "#111118",
+                  borderRadius: "10px",
+                  padding: "8px",
+                  overflowX: "auto",
+                  border: "1px solid rgba(75,239,160,0.2)",
+                  margin: 0,
+                }}
+              >
+                <code>
+                  npm install privacyx-sdk ethers
+                </code>
+              </pre>
+              <p
+                style={{
+                  fontSize: "12px",
+                  color: "#9ca3af",
+                  marginTop: "6px",
+                  marginBottom: "4px",
+                }}
+              >
+                Basic usage (Node / dApp):
+              </p>
+              <pre
+                style={{
+                  fontSize: "11px",
+                  background: "#111118",
+                  borderRadius: "10px",
+                  padding: "8px",
+                  overflowX: "auto",
+                  border: "1px solid rgba(31,41,55,0.9)",
+                  margin: 0,
+                }}
+              >
+                <code>{`import { PrivacyX } from "privacyx-sdk";
+import { JsonRpcProvider } from "ethers";
+
+const provider = new JsonRpcProvider(MAINNET_RPC_URL);
+const px = PrivacyX({
+  chainId: 1,
+  provider,
+  balancePassAddress:
+    "0x8333b589ad3a8a5fce735631e8edf693c6ae0472",
+});
+
+const root = await px.balancePass.getRoot();
+const thr = await px.balancePass.getThreshold();`}</code>
+              </pre>
             </div>
           </div>
 
@@ -921,22 +994,47 @@ function App() {
             >
               Full specification: PXP-101 · Privacyx Balance Pass.
             </span>
-            <a
-              href="https://github.com/Privacyx-org/privacyx-balance-pass"
-              target="_blank"
-              rel="noreferrer"
+            <div
               style={{
-                fontSize: "11px",
-                padding: "6px 10px",
-                borderRadius: "999px",
-                border: "1px solid rgba(148,163,184,0.4)",
-                color: "#e5e7eb",
-                textDecoration: "none",
-                background: "#111118",
+                display: "flex",
+                gap: "8px",
+                flexWrap: "wrap",
               }}
             >
-              View repo & examples
-            </a>
+              <a
+                href="https://github.com/Privacyx-org/privacyx-balance-pass"
+                target="_blank"
+                rel="noreferrer"
+                style={{
+                  fontSize: "11px",
+                  padding: "6px 10px",
+                  borderRadius: "999px",
+                  border: "1px solid rgba(148,163,184,0.4)",
+                  color: "#e5e7eb",
+                  textDecoration: "none",
+                  background: "#111118",
+                }}
+              >
+                View PXP-101 repo
+              </a>
+              <a
+                href="https://www.npmjs.com/package/privacyx-sdk"
+                target="_blank"
+                rel="noreferrer"
+                style={{
+                  fontSize: "11px",
+                  padding: "6px 10px",
+                  borderRadius: "999px",
+                  border: "1px solid rgba(148,163,184,0.4)",
+                  color: "#020617",
+                  textDecoration: "none",
+                  background: "#4befa0",
+                  fontWeight: 500,
+                }}
+              >
+                Open privacyx-sdk on npm
+              </a>
+            </div>
           </div>
         </div>
       </div>

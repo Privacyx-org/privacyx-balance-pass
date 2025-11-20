@@ -25,7 +25,7 @@ PXP-101 allows:
 
 The on-chain standard is specified in detail in:
 
-PXP-101.md
+- [`PXP-101.md`](./PXP-101.md)
 
 ---
 
@@ -35,13 +35,14 @@ This repo hosts the frontend used at https://pass.privacyx.tech
 
 It provides:
 
-- A wallet connection via MetaMask (mainnet by default).
+- Wallet connection via MetaMask (mainnet by default).
 - Display of current Merkle root and required threshold.
-- A "Submit ZK Access Proof" button that:
-  - Loads a pre-computed Groth16 proof from /public/balance_proof.json,
-  - Calls proveAndConsume(...) on the mainnet BalanceAccessPass contract,
+- A **"Submit ZK Access Proof"** button that:
+  - Loads a pre-computed Groth16 proof from `/public/balance_proof.json`,
+  - Calls `proveAndConsume(...)` on the mainnet `BalanceAccessPass` contract,
   - Shows transaction status, hash, and confirmation block.
-- A live feed of recent AccessGranted events on the contract.
+- A live feed of recent `AccessGranted` events on the contract.
+- An **integration section** describing how to plug PXP-101 into your backend or contracts.
 
 ---
 
@@ -60,10 +61,10 @@ npm install
 
 Create a .env file:
 
-cat > .env << 'EOF2'
+cat > .env << 'EOF'
 VITE_BALANCE_ACCESS_ADDRESS=0x8333b589ad3a8a5fce735631e8edf693c6ae0472
 VITE_CHAIN_ID=1
-EOF2
+EOF
 
 ### 4. Run dev server
 
@@ -84,34 +85,71 @@ function proveAndConsume(
   uint256[2] calldata _pA,
   uint256[2][2] calldata _pB,
   uint256[2] calldata _pC,
-  uint256[2] calldata _pubSignals
+  uint256[2] calldata _pubSignals // [root, nullifierHash]
 ) external;
 
 ---
 
-## Integration guide
+## Integration options
 
-### Option A — off-chain
+### Option A — off-chain / backend (listen to events)
 
-Monitor AccessGranted events on the contract:
-0x8333b589ad3A8A5fCe735631e8EDf693C6AE0472
+Monitor AccessGranted events on:
+BalanceAccessPass (PXP-101): 0x8333b589ad3a8a5fce735631e8edf693c6ae0472
 
-Use caller, nullifier, root for your access logic.
+Use caller, nullifier, root as inputs to your access logic.
 
-### Option B — on-chain
+### Option B — On-chain / contracts
 
-Require that the caller has successfully proved via PXP-101.
+Consume AccessGranted events or the nullifier as a one-time ticket.
+Gate features based on “has a valid PXP-101 pass” without revealing balances.
 
+### Option C — Integrate via Privacyx SDK
+
+The easiest way to integrate PXP-101 programmatically is via the Privacyx SDK:
+npm: privacyx-sdk
+repo: https://github.com/Privacyx-org/privacyx-sdk
+   
 ---
 
-## Future: PrivacyX SDK
+## Install
 
-import { createPrivacyxClient } from "@privacyx/sdk";
+npm install privacyx-sdk ethers
+   
+---
 
-const px = createPrivacyxClient({
+## Basic usage (Node / frontend with ethers v6)
+
+import { PrivacyX } from "privacyx-sdk";
+import { JsonRpcProvider } from "ethers";
+
+const provider = new JsonRpcProvider(process.env.MAINNET_RPC_URL);
+
+const px = PrivacyX({
   chainId: 1,
-  balancePassAddress: "0x8333b5...0472",
+  provider,
+  balancePassAddress: "0x8333b589ad3a8a5fce735631e8edf693c6ae0472",
 });
+
+// Read values
+const root = await px.balancePass.getRoot();
+const threshold = await px.balancePass.getThreshold();
+
+// Submit proof (example: server-side or in a dApp with a signer)
+const receipt = await px.balancePass.submitProof(signer, proof, [
+  rootValue,
+  nullifierHash,
+]);
+
+// Listen to events
+px.balancePass.onAccessGranted((ev) => {
+  console.log("ZK Access:", ev);
+});
+
+PXP-101 is the first module in the Privacyx standard family:
+PXP-101 — Balance Pass (implemented)
+PXP-102 — Identity Pass (planned)
+PXP-103 — Reputation Pass (planned)
 
 ---
 
@@ -125,5 +163,5 @@ https://www.privacyx.tech
 
 ## License
 
-TBD — provided “as is”.
+MIT
 
