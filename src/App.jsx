@@ -306,7 +306,7 @@ function App() {
     >
       <div
         style={{
-          maxWidth: "880px",
+          maxWidth: "1200px", // élargir le design sur desktop
           width: "100%",
           borderRadius: "24px",
           padding: "24px 24px 24px",
@@ -411,16 +411,18 @@ function App() {
               alignItems: "flex-end",
               gap: "6px",
               flexShrink: 0,
+              width: "100%",
+              maxWidth: "420px",
             }}
           >
-            {/* Single row: all 4 buttons, in requested order */}
+            {/* Row 1: Connect + Etherscan */}
             <div
               style={{
                 display: "flex",
                 gap: "8px",
                 justifyContent: "flex-end",
                 flexWrap: "wrap",
-                width: "100%", // ensure wrapping within card width (mobile-friendly)
+                width: "100%",
               }}
             >
               <button
@@ -459,7 +461,18 @@ function App() {
                   View contract on Etherscan
                 </a>
               )}
+            </div>
 
+            {/* Row 2: Spec + Integrate (sous la première en mobile comme en desktop) */}
+            <div
+              style={{
+                display: "flex",
+                gap: "8px",
+                justifyContent: "flex-end",
+                flexWrap: "wrap",
+                width: "100%",
+              }}
+            >
               <a
                 href="https://github.com/Privacyx-org/privacyx-balance-pass/blob/main/PXP-101.md"
                 target="_blank"
