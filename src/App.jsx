@@ -420,6 +420,7 @@ function App() {
                 gap: "8px",
                 justifyContent: "flex-end",
                 flexWrap: "wrap",
+                width: "100%", // ensure wrapping within card width (mobile-friendly)
               }}
             >
               <button
