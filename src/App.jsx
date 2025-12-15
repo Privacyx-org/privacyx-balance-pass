@@ -289,30 +289,52 @@ function App() {
       ? "Sepolia Testnet"
       : `ChainId ${chainId}`;
 
+  // --- UI tokens (aligned with PXP-102) ---
+  const ui = {
+    pageRadial:
+      "radial-gradient(circle at top, rgba(75,239,160,0.10), transparent 55%), #101010",
+    textPrimary: "#e2e8f0", // slate-200
+    textSecondary: "rgba(148,163,184,0.85)", // slate-400-ish
+    textMuted: "rgba(100,116,139,0.9)", // slate-500-ish
+
+    cardBg: "rgba(0,0,0,0.40)", // PXP-102 style
+    cardBgStrong: "rgba(0,0,0,0.55)",
+    borderSubtle: "1px solid rgba(148,163,184,0.18)",
+    borderStrong: "1px solid rgba(148,163,184,0.26)",
+    shadow: "0 24px 80px rgba(0,0,0,0.60)",
+
+    radiusLg: "16px",
+    radiusXl: "20px",
+    radius2xl: "24px",
+
+    privacyx: "#4befa0",
+    privacyxDark: "#020617",
+  };
+
   return (
     <div
       style={{
         minHeight: "100vh",
         width: "100vw",
         boxSizing: "border-box",
-        background:
-          "radial-gradient(circle at top, rgba(75,239,160,0.12), transparent 55%), #050509",
-        color: "#f5f5f5",
+        background: ui.pageRadial,
+        color: ui.textPrimary,
         display: "flex",
-        alignItems: "center",
+        alignItems: "flex-start",
         justifyContent: "center",
-        padding: "32px 16px",
+        padding: "24px 16px",
       }}
     >
       <div
         style={{
-          maxWidth: "1200px", // élargir le design sur desktop
+          maxWidth: "1152px",
           width: "100%",
-          borderRadius: "24px",
-          padding: "24px 24px 24px",
-          background: "#101015",
-          border: "1px solid rgba(255,255,255,0.06)",
-          boxShadow: "0 24px 80px rgba(0,0,0,0.7)",
+          borderRadius: ui.radius2xl,
+          padding: "20px",
+          background: ui.cardBg,
+          border: ui.borderSubtle,
+          boxShadow: ui.shadow,
+          backdropFilter: "blur(6px)",
         }}
       >
         {/* Header */}
@@ -321,7 +343,7 @@ function App() {
             display: "flex",
             justifyContent: "space-between",
             gap: "16px",
-            marginBottom: "24px",
+            marginBottom: "22px",
             alignItems: "flex-start",
             flexWrap: "wrap",
           }}
@@ -338,13 +360,15 @@ function App() {
               style={{
                 width: "40px",
                 height: "40px",
-                borderRadius: "12px",
-                background: "#050509",
+                borderRadius: "14px",
+                background: ui.cardBgStrong,
+                border: ui.borderSubtle,
+                boxShadow: "0 10px 30px rgba(0,0,0,0.35)",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
                 flexShrink: 0,
-                marginTop: "2px", // léger ajustement pour aligner optiquement avec le titre
+                marginTop: "2px",
               }}
             >
               <img
@@ -361,19 +385,21 @@ function App() {
             <div>
               <h1
                 style={{
-                  fontSize: "24px",
+                  fontSize: "18px",
                   fontWeight: 600,
                   margin: 0,
-                  lineHeight: "1.1",
+                  lineHeight: "1.15",
+                  letterSpacing: "-0.01em",
                 }}
               >
                 PXP-101 : Privacyx Balance Pass (ZK Access)
               </h1>
               <p
                 style={{
-                  fontSize: "13px",
-                  color: "#9ca3af",
+                  fontSize: "12px",
+                  color: ui.textSecondary,
                   marginTop: "6px",
+                  maxWidth: "680px",
                 }}
               >
                 Prove that you meet the balance requirement without revealing your
@@ -387,7 +413,7 @@ function App() {
                   alignItems: "center",
                   gap: "8px",
                   fontSize: "11px",
-                  color: networkOk ? "#4befa0" : "#f97373",
+                  color: networkOk ? ui.privacyx : "rgba(248,113,113,0.95)",
                 }}
               >
                 <span
@@ -395,7 +421,7 @@ function App() {
                     width: "8px",
                     height: "8px",
                     borderRadius: "999px",
-                    backgroundColor: networkOk ? "#4befa0" : "#f97373",
+                    backgroundColor: networkOk ? ui.privacyx : "rgba(248,113,113,0.95)",
                   }}
                 />
                 <span>{networkLabel}</span>
@@ -430,13 +456,18 @@ function App() {
                 style={{
                   padding: "6px 12px",
                   borderRadius: "999px",
-                  border: "1px solid rgba(255,255,255,0.1)",
-                  background: account ? "rgba(75,239,160,0.08)" : "#4befa0",
-                  color: account ? "#4befa0" : "#020617",
+                  border: account
+                    ? "1px solid rgba(75,239,160,0.35)"
+                    : ui.borderSubtle,
+                  background: account ? "rgba(75,239,160,0.10)" : ui.privacyx,
+                  color: account ? ui.privacyx : ui.privacyxDark,
                   fontSize: "11px",
-                  fontWeight: 500,
+                  fontWeight: 600,
                   cursor: "pointer",
                   whiteSpace: "nowrap",
+                  boxShadow: account
+                    ? "none"
+                    : "0 10px 30px rgba(75,239,160,0.18)",
                 }}
               >
                 {account ? shortAddr(account) : "Connect Wallet"}
@@ -451,10 +482,10 @@ function App() {
                     fontSize: "11px",
                     padding: "6px 10px",
                     borderRadius: "999px",
-                    border: "1px solid rgba(148,163,184,0.4)",
-                    color: "#e5e7eb",
+                    border: ui.borderSubtle,
+                    color: ui.textPrimary,
                     textDecoration: "none",
-                    background: "#111118",
+                    background: ui.cardBgStrong,
                     whiteSpace: "nowrap",
                   }}
                 >
@@ -463,7 +494,7 @@ function App() {
               )}
             </div>
 
-            {/* Row 2: Spec + Integrate (sous la première en mobile comme en desktop) */}
+            {/* Row 2: Spec + Integrate */}
             <div
               style={{
                 display: "flex",
@@ -481,10 +512,10 @@ function App() {
                   fontSize: "11px",
                   padding: "6px 10px",
                   borderRadius: "999px",
-                  border: "1px solid rgba(148,163,184,0.4)",
-                  color: "#e5e7eb",
+                  border: ui.borderSubtle,
+                  color: ui.textPrimary,
                   textDecoration: "none",
-                  background: "rgba(15,23,42,0.9)",
+                  background: ui.cardBgStrong,
                   whiteSpace: "nowrap",
                 }}
               >
@@ -498,11 +529,12 @@ function App() {
                   padding: "6px 10px",
                   borderRadius: "999px",
                   border: "none",
-                  color: "#020617",
+                  color: ui.privacyxDark,
                   textDecoration: "none",
-                  background: "#4befa0",
-                  fontWeight: 500,
+                  background: ui.privacyx,
+                  fontWeight: 700,
                   whiteSpace: "nowrap",
+                  boxShadow: "0 10px 30px rgba(75,239,160,0.16)",
                 }}
               >
                 Integrate in your dApp
@@ -517,18 +549,18 @@ function App() {
             display: "grid",
             gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
             gap: "16px",
-            marginBottom: "24px",
+            marginBottom: "22px",
           }}
         >
           <div
             style={{
               padding: "16px",
-              borderRadius: "16px",
-              background: "#15151d",
-              border: "1px solid rgba(148,163,184,0.18)",
+              borderRadius: ui.radiusLg,
+              background: ui.cardBg,
+              border: ui.borderSubtle,
             }}
           >
-            <div style={{ fontSize: "12px", color: "#9ca3af" }}>
+            <div style={{ fontSize: "12px", color: ui.textSecondary }}>
               Merkle Root (on-chain)
             </div>
             <div
@@ -536,7 +568,7 @@ function App() {
                 fontSize: "11px",
                 marginTop: "8px",
                 wordBreak: "break-all",
-                color: "#e5e7eb",
+                color: ui.textPrimary,
               }}
             >
               {currentRoot ? currentRoot.toString() : "—"}
@@ -546,20 +578,21 @@ function App() {
           <div
             style={{
               padding: "16px",
-              borderRadius: "16px",
-              background: "#15151d",
-              border: "1px solid rgba(148,163,184,0.18)",
+              borderRadius: ui.radiusLg,
+              background: ui.cardBg,
+              border: ui.borderSubtle,
             }}
           >
-            <div style={{ fontSize: "12px", color: "#9ca3af" }}>
+            <div style={{ fontSize: "12px", color: ui.textSecondary }}>
               Required threshold
             </div>
             <div
               style={{
                 fontSize: "20px",
-                fontWeight: 600,
+                fontWeight: 700,
                 marginTop: "8px",
-                color: "#4befa0",
+                color: ui.privacyx,
+                letterSpacing: "-0.01em",
               }}
             >
               {threshold ? threshold.toString() : "—"}
@@ -567,7 +600,7 @@ function App() {
             <div
               style={{
                 fontSize: "11px",
-                color: "#9ca3af",
+                color: ui.textSecondary,
                 marginTop: "4px",
               }}
             >
@@ -582,23 +615,24 @@ function App() {
             display: "grid",
             gridTemplateColumns: "minmax(0, 3fr) minmax(0, 2fr)",
             gap: "16px",
-            marginBottom: "24px",
+            marginBottom: "22px",
           }}
         >
           {/* Action zone */}
           <div
             style={{
               padding: "16px",
-              borderRadius: "16px",
-              background: "#15151d",
-              border: "1px solid rgba(148,163,184,0.18)",
+              borderRadius: ui.radiusLg,
+              background: ui.cardBg,
+              border: ui.borderSubtle,
             }}
           >
             <h2
               style={{
-                fontSize: "16px",
-                fontWeight: 500,
+                fontSize: "15px",
+                fontWeight: 600,
                 marginBottom: "8px",
+                letterSpacing: "-0.01em",
               }}
             >
               1. Submit your ZK proof
@@ -606,14 +640,24 @@ function App() {
             <p
               style={{
                 fontSize: "13px",
-                color: "#9ca3af",
+                color: ui.textSecondary,
                 marginBottom: "12px",
+                lineHeight: "1.6",
               }}
             >
               This demo loads a pre-computed proof from{" "}
-              <code>/balance_proof.json</code> and{" "}
-              <code>/balance_public.json</code>, then calls{" "}
-              <code>proveAndConsume</code> on the BalanceAccessPass contract.
+              <code style={{ color: ui.textPrimary, opacity: 0.9 }}>
+                /balance_proof.json
+              </code>{" "}
+              and{" "}
+              <code style={{ color: ui.textPrimary, opacity: 0.9 }}>
+                /balance_public.json
+              </code>
+              , then calls{" "}
+              <code style={{ color: ui.textPrimary, opacity: 0.9 }}>
+                proveAndConsume
+              </code>{" "}
+              on the BalanceAccessPass contract.
             </p>
 
             <button
@@ -624,12 +668,18 @@ function App() {
                 borderRadius: "999px",
                 border: "none",
                 background:
-                  loading || !account ? "rgba(148,163,184,0.4)" : "#4befa0",
-                color: "#020617",
-                fontSize: "14px",
-                fontWeight: 600,
+                  loading || !account
+                    ? "rgba(148,163,184,0.30)"
+                    : ui.privacyx,
+                color: ui.privacyxDark,
+                fontSize: "13px",
+                fontWeight: 800,
                 cursor: loading || !account ? "not-allowed" : "pointer",
-                marginTop: "4px",
+                marginTop: "6px",
+                boxShadow:
+                  loading || !account
+                    ? "none"
+                    : "0 12px 30px rgba(75,239,160,0.14)",
               }}
             >
               {loading
@@ -644,7 +694,7 @@ function App() {
                 style={{
                   marginTop: "12px",
                   fontSize: "13px",
-                  color: status.startsWith("Access") ? "#4befa0" : "#e5e7eb",
+                  color: status.startsWith("Access") ? ui.privacyx : ui.textPrimary,
                 }}
               >
                 {status}
@@ -656,7 +706,7 @@ function App() {
                 style={{
                   marginTop: "8px",
                   fontSize: "11px",
-                  color: "#9ca3af",
+                  color: ui.textSecondary,
                   wordBreak: "break-all",
                 }}
               >
@@ -665,7 +715,7 @@ function App() {
                   href={`${ETHERSCAN_BASE}/tx/${txHash}`}
                   target="_blank"
                   rel="noreferrer"
-                  style={{ color: "#9ca3af", textDecoration: "underline" }}
+                  style={{ color: ui.textSecondary, textDecoration: "underline" }}
                 >
                   {txHash}
                 </a>
@@ -677,7 +727,7 @@ function App() {
                 style={{
                   marginTop: "12px",
                   fontSize: "12px",
-                  color: "#f97373",
+                  color: "rgba(248,113,113,0.95)",
                 }}
               >
                 ⚠️ {error}
@@ -689,16 +739,17 @@ function App() {
           <div
             style={{
               padding: "16px",
-              borderRadius: "16px",
-              background: "#15151d",
-              border: "1px solid rgba(148,163,184,0.18)",
+              borderRadius: ui.radiusLg,
+              background: ui.cardBg,
+              border: ui.borderSubtle,
             }}
           >
             <h2
               style={{
                 fontSize: "14px",
-                fontWeight: 500,
+                fontWeight: 600,
                 marginBottom: "8px",
+                letterSpacing: "-0.01em",
               }}
             >
               2. Recent ZK access (on-chain)
@@ -706,19 +757,22 @@ function App() {
             <p
               style={{
                 fontSize: "12px",
-                color: "#9ca3af",
+                color: ui.textSecondary,
                 marginBottom: "10px",
+                lineHeight: "1.6",
               }}
             >
-              Live view of <code>AccessGranted</code> events emitted by the
-              BalanceAccessPass contract.
+              Live view of <code style={{ color: ui.textPrimary, opacity: 0.9 }}>
+                AccessGranted
+              </code>{" "}
+              events emitted by the BalanceAccessPass contract.
             </p>
 
             {accessEvents.length === 0 && (
               <div
                 style={{
                   fontSize: "12px",
-                  color: "#6b7280",
+                  color: ui.textMuted,
                   fontStyle: "italic",
                 }}
               >
@@ -741,9 +795,9 @@ function App() {
                     key={`${ev.txHash || "local"}-${idx}`}
                     style={{
                       padding: "8px 10px",
-                      borderRadius: "10px",
-                      background: "#111118",
-                      border: "1px solid rgba(75,239,160,0.15)",
+                      borderRadius: "12px",
+                      background: ui.cardBgStrong,
+                      border: ui.borderSubtle,
                       fontSize: "11px",
                     }}
                   >
@@ -754,22 +808,22 @@ function App() {
                         marginBottom: "4px",
                       }}
                     >
-                      <span style={{ color: "#4befa0", fontWeight: 500 }}>
+                      <span style={{ color: ui.privacyx, fontWeight: 700 }}>
                         Access granted
                       </span>
                       {ev.blockNumber && (
-                        <span style={{ color: "#9ca3af" }}>
+                        <span style={{ color: ui.textSecondary }}>
                           Block #{ev.blockNumber}
                         </span>
                       )}
                     </div>
-                    <div style={{ color: "#9ca3af" }}>
+                    <div style={{ color: ui.textSecondary }}>
                       Caller: {shortAddr(ev.caller)}
                     </div>
-                    <div style={{ color: "#9ca3af" }}>
+                    <div style={{ color: ui.textSecondary }}>
                       Nullifier: {shortHex(ev.nullifier)}
                     </div>
-                    <div style={{ color: "#9ca3af" }}>
+                    <div style={{ color: ui.textSecondary }}>
                       Root: {shortHex(ev.root)}
                     </div>
                     {ev.txHash && (
@@ -779,7 +833,7 @@ function App() {
                           target="_blank"
                           rel="noreferrer"
                           style={{
-                            color: "#9ca3af",
+                            color: ui.textSecondary,
                             textDecoration: "underline",
                           }}
                         >
@@ -800,16 +854,17 @@ function App() {
           style={{
             marginTop: "8px",
             padding: "16px",
-            borderRadius: "16px",
-            background: "#15151d",
-            border: "1px solid rgba(148,163,184,0.18)",
+            borderRadius: ui.radiusLg,
+            background: ui.cardBg,
+            border: ui.borderStrong,
           }}
         >
           <h2
             style={{
-              fontSize: "16px",
-              fontWeight: 500,
+              fontSize: "15px",
+              fontWeight: 600,
               marginBottom: "8px",
+              letterSpacing: "-0.01em",
             }}
           >
             3. Integration guide (PXP-101)
@@ -817,8 +872,9 @@ function App() {
           <p
             style={{
               fontSize: "13px",
-              color: "#9ca3af",
+              color: ui.textSecondary,
               marginBottom: "10px",
+              lineHeight: "1.6",
             }}
           >
             Use PXP-101 as a plug-and-play balance-based privacy gate in your dApp or
@@ -839,21 +895,22 @@ function App() {
               <h3
                 style={{
                   fontSize: "13px",
-                  fontWeight: 500,
+                  fontWeight: 600,
                   marginBottom: "6px",
                 }}
               >
-                Option A — Off-chain / backend
+                Option A: Off-chain / backend
               </h3>
               <ul
                 style={{
                   margin: 0,
                   paddingLeft: "16px",
                   fontSize: "12px",
-                  color: "#9ca3af",
+                  color: ui.textSecondary,
                   display: "flex",
                   flexDirection: "column",
                   gap: "4px",
+                  lineHeight: "1.6",
                 }}
               >
                 <li>
@@ -862,19 +919,35 @@ function App() {
                     href="https://pass.privacyx.tech"
                     target="_blank"
                     rel="noreferrer"
-                    style={{ color: "#e5e7eb", textDecoration: "underline" }}
+                    style={{ color: ui.textPrimary, textDecoration: "underline" }}
                   >
                     pass.privacyx.tech
                   </a>
                   .
                 </li>
                 <li>
-                  Monitor <code>AccessGranted</code> events on{" "}
-                  <code>0x8333b589ad3A8A5fCe735631e8EDf693C6AE0472</code>.
+                  Monitor <code style={{ color: ui.textPrimary, opacity: 0.9 }}>
+                    AccessGranted
+                  </code>{" "}
+                  events on{" "}
+                  <code style={{ color: ui.textPrimary, opacity: 0.9 }}>
+                    0x8333b589ad3A8A5fCe735631e8EDf693C6AE0472
+                  </code>
+                  .
                 </li>
                 <li>
-                  Use <code>caller</code>, <code>nullifier</code>, and{" "}
-                  <code>root</code> as inputs to your private access logic.
+                  Use <code style={{ color: ui.textPrimary, opacity: 0.9 }}>
+                    caller
+                  </code>
+                  ,{" "}
+                  <code style={{ color: ui.textPrimary, opacity: 0.9 }}>
+                    nullifier
+                  </code>
+                  , and{" "}
+                  <code style={{ color: ui.textPrimary, opacity: 0.9 }}>
+                    root
+                  </code>{" "}
+                  as inputs to your private access logic.
                 </li>
               </ul>
             </div>
@@ -884,26 +957,29 @@ function App() {
               <h3
                 style={{
                   fontSize: "13px",
-                  fontWeight: 500,
+                  fontWeight: 600,
                   marginBottom: "6px",
                 }}
               >
-                Option B — On-chain / contracts
+                Option B: On-chain / contracts
               </h3>
               <ul
                 style={{
                   margin: 0,
                   paddingLeft: "16px",
                   fontSize: "12px",
-                  color: "#9ca3af",
+                  color: ui.textSecondary,
                   display: "flex",
                   flexDirection: "column",
                   gap: "4px",
+                  lineHeight: "1.6",
                 }}
               >
                 <li>
-                  Consume <code>AccessGranted</code> events or nullifiers as
-                  one-time tickets.
+                  Consume <code style={{ color: ui.textPrimary, opacity: 0.9 }}>
+                    AccessGranted
+                  </code>{" "}
+                  events or nullifiers as one-time tickets.
                 </li>
                 <li>
                   Gate features based on “has a valid PXP-101 pass” without
@@ -921,17 +997,18 @@ function App() {
               <h3
                 style={{
                   fontSize: "13px",
-                  fontWeight: 500,
+                  fontWeight: 600,
                   marginBottom: "6px",
                 }}
               >
-                Option C — Via Privacyx SDK
+                Option C: Via Privacyx SDK
               </h3>
               <p
                 style={{
                   fontSize: "12px",
-                  color: "#9ca3af",
+                  color: ui.textSecondary,
                   marginBottom: "6px",
+                  lineHeight: "1.6",
                 }}
               >
                 Install the official SDK to read PXP-101 state and submit proofs
@@ -940,24 +1017,22 @@ function App() {
               <pre
                 style={{
                   fontSize: "11px",
-                  background: "#111118",
-                  borderRadius: "10px",
-                  padding: "8px",
+                  background: ui.cardBgStrong,
+                  borderRadius: "14px",
+                  padding: "10px",
                   overflowX: "auto",
-                  border: "1px solid rgba(75,239,160,0.2)",
+                  border: ui.borderSubtle,
                   margin: 0,
                 }}
               >
-                <code>
-                  npm install privacyx-sdk ethers
-                </code>
+                <code>npm install privacyx-sdk ethers</code>
               </pre>
               <p
                 style={{
                   fontSize: "12px",
-                  color: "#9ca3af",
-                  marginTop: "6px",
-                  marginBottom: "4px",
+                  color: ui.textSecondary,
+                  marginTop: "8px",
+                  marginBottom: "6px",
                 }}
               >
                 Basic usage (Node / dApp):
@@ -965,11 +1040,11 @@ function App() {
               <pre
                 style={{
                   fontSize: "11px",
-                  background: "#111118",
-                  borderRadius: "10px",
-                  padding: "8px",
+                  background: ui.cardBgStrong,
+                  borderRadius: "14px",
+                  padding: "10px",
                   overflowX: "auto",
-                  border: "1px solid rgba(31,41,55,0.9)",
+                  border: ui.borderSubtle,
                   margin: 0,
                 }}
               >
@@ -1003,7 +1078,7 @@ const thr = await px.balancePass.getThreshold();`}</code>
             <span
               style={{
                 fontSize: "11px",
-                color: "#6b7280",
+                color: ui.textMuted,
               }}
             >
               Full specification: PXP-101 · Privacyx Balance Pass.
@@ -1023,10 +1098,10 @@ const thr = await px.balancePass.getThreshold();`}</code>
                   fontSize: "11px",
                   padding: "6px 10px",
                   borderRadius: "999px",
-                  border: "1px solid rgba(148,163,184,0.4)",
-                  color: "#e5e7eb",
+                  border: ui.borderSubtle,
+                  color: ui.textPrimary,
                   textDecoration: "none",
-                  background: "#111118",
+                  background: ui.cardBgStrong,
                 }}
               >
                 View PXP-101 repo
@@ -1039,17 +1114,36 @@ const thr = await px.balancePass.getThreshold();`}</code>
                   fontSize: "11px",
                   padding: "6px 10px",
                   borderRadius: "999px",
-                  border: "1px solid rgba(148,163,184,0.4)",
-                  color: "#020617",
+                  border: "none",
+                  color: ui.privacyxDark,
                   textDecoration: "none",
-                  background: "#4befa0",
-                  fontWeight: 500,
+                  background: ui.privacyx,
+                  fontWeight: 700,
+                  boxShadow: "0 10px 30px rgba(75,239,160,0.16)",
                 }}
               >
                 Open privacyx-sdk on npm
               </a>
             </div>
           </div>
+        </div>
+
+        {/* Small footer (visual parity with PXP-102) */}
+        <div
+          style={{
+            marginTop: "18px",
+            paddingTop: "12px",
+            borderTop: ui.borderSubtle,
+            display: "flex",
+            flexWrap: "wrap",
+            gap: "8px",
+            justifyContent: "space-between",
+            fontSize: "11px",
+            color: ui.textMuted,
+          }}
+        >
+          <span>Privacyx · Identity layer for Web3 anonymity.</span>
+          <span style={{ opacity: 0.9 }}>PXP-101 · Balance pass · mainnet primitive</span>
         </div>
       </div>
     </div>
