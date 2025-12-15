@@ -20,16 +20,20 @@ const BALANCE_ACCESS_ABI = [
   "event AccessGranted(address indexed caller, bytes32 nullifier, uint256 root)",
 ];
 
-// --- Icons (same vibe as PXP-102) ---
+/* -------------------------------------------------------------------------- */
+/*                                ICONS                                       */
+/* -------------------------------------------------------------------------- */
+
+// ✅ IMPORTANT: no Tailwind dependency (w-4 h-4). We force size via style.
 const SunIcon = () => (
   <svg
-    className="w-4 h-4"
     viewBox="0 0 24 24"
     fill="none"
     stroke="#4befa0"
     strokeWidth="1.8"
     strokeLinecap="round"
     strokeLinejoin="round"
+    style={{ width: 16, height: 16, display: "block" }}
   >
     <circle cx="12" cy="12" r="4" />
     <line x1="12" y1="2" x2="12" y2="4" />
@@ -45,19 +49,19 @@ const SunIcon = () => (
 
 const MoonIcon = () => (
   <svg
-    className="w-4 h-4"
     viewBox="0 0 24 24"
     fill="none"
     stroke="#4befa0"
     strokeWidth="1.8"
     strokeLinecap="round"
     strokeLinejoin="round"
+    style={{ width: 16, height: 16, display: "block" }}
   >
     <path d="M21 12.79A9 9 0 0 1 12.21 3 7 7 0 0 0 12 17a7 7 0 0 0 9-4.21Z" />
   </svg>
 );
 
-function ThemeToggle({ darkMode, setDarkMode }) {
+function ThemeToggle({ darkMode, setDarkMode, compact = false }) {
   return (
     <button
       onClick={() => setDarkMode(!darkMode)}
@@ -65,11 +69,14 @@ function ThemeToggle({ darkMode, setDarkMode }) {
         display: "inline-flex",
         alignItems: "center",
         justifyContent: "center",
+        gap: "8px",
         fontSize: "12px",
-        padding: "6px 10px",
+        padding: compact ? "6px 8px" : "6px 10px",
         borderRadius: "12px",
-        border: darkMode ? "1px solid rgba(255,255,255,0.08)" : "1px solid #d1d5db",
-        background: darkMode ? "rgba(255,255,255,0.04)" : "#ffffff",
+        border: darkMode
+          ? "1px solid rgba(255,255,255,0.10)"
+          : "1px solid #e5e7eb",
+        background: darkMode ? "rgba(255,255,255,0.05)" : "#ffffff",
         cursor: "pointer",
         transition: "all 150ms ease",
       }}
@@ -354,8 +361,12 @@ function App() {
 
   // --- Theme-dependent tokens (match PXP-102) ---
   const textPrimary = darkMode ? "#f1f5f9" : "#0f172a"; // slate-100 / slate-900
-  const textSecondary = darkMode ? "rgba(148,163,184,0.85)" : "rgba(51,65,85,0.9)"; // slate-400 / slate-700
-  const textMuted = darkMode ? "rgba(100,116,139,0.95)" : "rgba(51,65,85,0.75)"; // slate-500-ish
+  const textSecondary = darkMode
+    ? "rgba(148,163,184,0.85)"
+    : "rgba(51,65,85,0.9)"; // slate-400 / slate-700
+  const textMuted = darkMode
+    ? "rgba(100,116,139,0.95)"
+    : "rgba(51,65,85,0.75)"; // slate-500-ish
   const pageBg = darkMode ? "#101010" : "#f3f3f3";
   const cardBg = darkMode ? "rgba(0,0,0,0.40)" : "#ffffff";
   const cardBgStrong = darkMode ? "rgba(0,0,0,0.55)" : "#ffffff";
@@ -365,7 +376,9 @@ function App() {
   const borderStrong = darkMode
     ? "1px solid rgba(148,163,184,0.26)"
     : "1px solid rgba(100,116,139,0.35)";
-  const shadow = darkMode ? "0 24px 80px rgba(0,0,0,0.60)" : "0 18px 60px rgba(15,23,42,0.12)";
+  const shadow = darkMode
+    ? "0 24px 80px rgba(0,0,0,0.60)"
+    : "0 18px 60px rgba(15,23,42,0.12)";
 
   const privacyx = "#4befa0";
   const privacyxDark = "#020617";
@@ -385,6 +398,16 @@ function App() {
         transition: "background-color 200ms ease, color 200ms ease",
       }}
     >
+      {/* Simple responsive rules for toggle placement */}
+      <style>{`
+        .pxp101-mobileToggle { display: none; }
+        .pxp101-desktopToggle { display: flex; }
+        @media (max-width: 640px) {
+          .pxp101-mobileToggle { display: inline-flex; }
+          .pxp101-desktopToggle { display: none; }
+        }
+      `}</style>
+
       <div
         style={{
           maxWidth: "1152px",
@@ -417,7 +440,9 @@ function App() {
                 borderRadius: "14px",
                 background: cardBgStrong,
                 border: borderSubtle,
-                boxShadow: darkMode ? "0 10px 30px rgba(0,0,0,0.35)" : "0 10px 30px rgba(15,23,42,0.08)",
+                boxShadow: darkMode
+                  ? "0 10px 30px rgba(0,0,0,0.35)"
+                  : "0 10px 30px rgba(15,23,42,0.08)",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
@@ -432,18 +457,37 @@ function App() {
               />
             </div>
 
-            <div>
-              <h1
+            <div style={{ width: "100%" }}>
+              {/* Title row with MOBILE toggle at top-right */}
+              <div
                 style={{
-                  fontSize: "18px",
-                  fontWeight: 600,
-                  margin: 0,
-                  lineHeight: "1.15",
-                  letterSpacing: "-0.01em",
+                  display: "flex",
+                  alignItems: "flex-start",
+                  justifyContent: "space-between",
+                  gap: "10px",
                 }}
               >
-                PXP-101 : Privacyx Balance Pass (ZK Access)
-              </h1>
+                <h1
+                  style={{
+                    fontSize: "18px",
+                    fontWeight: 600,
+                    margin: 0,
+                    lineHeight: "1.15",
+                    letterSpacing: "-0.01em",
+                  }}
+                >
+                  PXP-101 · Zero-knowledge Balance pass
+                </h1>
+
+                {/* ✅ Mobile toggle (visible only <= 640px) */}
+                <span className="pxp101-mobileToggle">
+                  <ThemeToggle
+                    darkMode={darkMode}
+                    setDarkMode={setDarkMode}
+                    compact
+                  />
+                </span>
+              </div>
 
               <p
                 style={{
@@ -472,7 +516,9 @@ function App() {
                     width: "8px",
                     height: "8px",
                     borderRadius: "999px",
-                    backgroundColor: networkOk ? privacyx : "rgba(248,113,113,0.95)",
+                    backgroundColor: networkOk
+                      ? privacyx
+                      : "rgba(248,113,113,0.95)",
                   }}
                 />
                 <span>{networkLabel}</span>
@@ -480,7 +526,7 @@ function App() {
             </div>
           </div>
 
-          {/* Wallet + links + theme toggle */}
+          {/* Wallet + links + DESKTOP theme toggle */}
           <div
             style={{
               display: "flex",
@@ -492,8 +538,11 @@ function App() {
               maxWidth: "520px",
             }}
           >
-            {/* Row 0: Theme toggle (same placement spirit as PXP-102 desktop nav) */}
-            <div style={{ width: "100%", display: "flex", justifyContent: "flex-end" }}>
+            {/* Row 0: Theme toggle (desktop only) */}
+            <div
+              className="pxp101-desktopToggle"
+              style={{ width: "100%", justifyContent: "flex-end" }}
+            >
               <ThemeToggle darkMode={darkMode} setDarkMode={setDarkMode} />
             </div>
 
@@ -521,9 +570,7 @@ function App() {
                   fontWeight: 600,
                   cursor: "pointer",
                   whiteSpace: "nowrap",
-                  boxShadow: account
-                    ? "none"
-                    : "0 10px 30px rgba(75,239,160,0.18)",
+                  boxShadow: account ? "none" : "0 10px 30px rgba(75,239,160,0.18)",
                   transition: "all 150ms ease",
                 }}
               >
@@ -870,7 +917,7 @@ function App() {
             {/* Off-chain */}
             <div>
               <h3 style={{ fontSize: "13px", fontWeight: 600, marginBottom: "6px" }}>
-                Option A — Off-chain / backend
+                Option A: Off-chain / backend
               </h3>
               <ul
                 style={{
@@ -915,7 +962,7 @@ function App() {
             {/* On-chain */}
             <div>
               <h3 style={{ fontSize: "13px", fontWeight: 600, marginBottom: "6px" }}>
-                Option B — On-chain / contracts
+                Option B: On-chain / contracts
               </h3>
               <ul
                 style={{
@@ -945,7 +992,7 @@ function App() {
             {/* SDK */}
             <div>
               <h3 style={{ fontSize: "13px", fontWeight: 600, marginBottom: "6px" }}>
-                Option C — Via Privacyx SDK
+                Option C: Via Privacyx SDK
               </h3>
               <p style={{ fontSize: "12px", color: textSecondary, marginBottom: "6px", lineHeight: "1.6" }}>
                 Install the official SDK to read PXP-101 state and submit proofs with a simple API:
