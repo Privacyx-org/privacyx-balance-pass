@@ -20,7 +20,70 @@ const BALANCE_ACCESS_ABI = [
   "event AccessGranted(address indexed caller, bytes32 nullifier, uint256 root)",
 ];
 
+// --- Icons (same vibe as PXP-102) ---
+const SunIcon = () => (
+  <svg
+    className="w-4 h-4"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="#4befa0"
+    strokeWidth="1.8"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
+    <circle cx="12" cy="12" r="4" />
+    <line x1="12" y1="2" x2="12" y2="4" />
+    <line x1="12" y1="20" x2="12" y2="22" />
+    <line x1="4.93" y1="4.93" x2="6.34" y2="6.34" />
+    <line x1="17.66" y1="17.66" x2="19.07" y2="19.07" />
+    <line x1="2" y1="12" x2="4" y2="12" />
+    <line x1="20" y1="12" x2="22" y2="12" />
+    <line x1="4.93" y1="19.07" x2="6.34" y2="17.66" />
+    <line x1="17.66" y1="6.34" x2="19.07" y2="4.93" />
+  </svg>
+);
+
+const MoonIcon = () => (
+  <svg
+    className="w-4 h-4"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="#4befa0"
+    strokeWidth="1.8"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
+    <path d="M21 12.79A9 9 0 0 1 12.21 3 7 7 0 0 0 12 17a7 7 0 0 0 9-4.21Z" />
+  </svg>
+);
+
+function ThemeToggle({ darkMode, setDarkMode }) {
+  return (
+    <button
+      onClick={() => setDarkMode(!darkMode)}
+      style={{
+        display: "inline-flex",
+        alignItems: "center",
+        justifyContent: "center",
+        fontSize: "12px",
+        padding: "6px 10px",
+        borderRadius: "12px",
+        border: darkMode ? "1px solid rgba(255,255,255,0.08)" : "1px solid #d1d5db",
+        background: darkMode ? "rgba(255,255,255,0.04)" : "#ffffff",
+        cursor: "pointer",
+        transition: "all 150ms ease",
+      }}
+      aria-label="Toggle theme"
+      title="Toggle theme"
+    >
+      {darkMode ? <SunIcon /> : <MoonIcon />}
+    </button>
+  );
+}
+
 function App() {
+  const [darkMode, setDarkMode] = useState(true);
+
   const [account, setAccount] = useState(null);
   const [provider, setProvider] = useState(null);
   const [signer, setSigner] = useState(null);
@@ -289,27 +352,23 @@ function App() {
       ? "Sepolia Testnet"
       : `ChainId ${chainId}`;
 
-  // --- UI tokens (aligned with PXP-102) ---
-  const ui = {
-    pageRadial:
-      "radial-gradient(circle at top, rgba(75,239,160,0.10), transparent 55%), #101010",
-    textPrimary: "#e2e8f0", // slate-200
-    textSecondary: "rgba(148,163,184,0.85)", // slate-400-ish
-    textMuted: "rgba(100,116,139,0.9)", // slate-500-ish
+  // --- Theme-dependent tokens (match PXP-102) ---
+  const textPrimary = darkMode ? "#f1f5f9" : "#0f172a"; // slate-100 / slate-900
+  const textSecondary = darkMode ? "rgba(148,163,184,0.85)" : "rgba(51,65,85,0.9)"; // slate-400 / slate-700
+  const textMuted = darkMode ? "rgba(100,116,139,0.95)" : "rgba(51,65,85,0.75)"; // slate-500-ish
+  const pageBg = darkMode ? "#101010" : "#f3f3f3";
+  const cardBg = darkMode ? "rgba(0,0,0,0.40)" : "#ffffff";
+  const cardBgStrong = darkMode ? "rgba(0,0,0,0.55)" : "#ffffff";
+  const borderSubtle = darkMode
+    ? "1px solid rgba(148,163,184,0.18)"
+    : "1px solid rgba(148,163,184,0.35)";
+  const borderStrong = darkMode
+    ? "1px solid rgba(148,163,184,0.26)"
+    : "1px solid rgba(100,116,139,0.35)";
+  const shadow = darkMode ? "0 24px 80px rgba(0,0,0,0.60)" : "0 18px 60px rgba(15,23,42,0.12)";
 
-    cardBg: "rgba(0,0,0,0.40)", // PXP-102 style
-    cardBgStrong: "rgba(0,0,0,0.55)",
-    borderSubtle: "1px solid rgba(148,163,184,0.18)",
-    borderStrong: "1px solid rgba(148,163,184,0.26)",
-    shadow: "0 24px 80px rgba(0,0,0,0.60)",
-
-    radiusLg: "16px",
-    radiusXl: "20px",
-    radius2xl: "24px",
-
-    privacyx: "#4befa0",
-    privacyxDark: "#020617",
-  };
+  const privacyx = "#4befa0";
+  const privacyxDark = "#020617";
 
   return (
     <div
@@ -317,24 +376,25 @@ function App() {
         minHeight: "100vh",
         width: "100vw",
         boxSizing: "border-box",
-        background: ui.pageRadial,
-        color: ui.textPrimary,
+        background: pageBg, // ✅ no gradient
+        color: textPrimary,
         display: "flex",
         alignItems: "flex-start",
         justifyContent: "center",
         padding: "24px 16px",
+        transition: "background-color 200ms ease, color 200ms ease",
       }}
     >
       <div
         style={{
           maxWidth: "1152px",
           width: "100%",
-          borderRadius: ui.radius2xl,
+          borderRadius: "24px",
           padding: "20px",
-          background: ui.cardBg,
-          border: ui.borderSubtle,
-          boxShadow: ui.shadow,
-          backdropFilter: "blur(6px)",
+          background: cardBg,
+          border: borderSubtle,
+          boxShadow: shadow,
+          transition: "background-color 200ms ease, border-color 200ms ease",
         }}
       >
         {/* Header */}
@@ -349,21 +409,15 @@ function App() {
           }}
         >
           {/* Logo + title */}
-          <div
-            style={{
-              display: "flex",
-              alignItems: "flex-start",
-              gap: "12px",
-            }}
-          >
+          <div style={{ display: "flex", alignItems: "flex-start", gap: "12px" }}>
             <div
               style={{
                 width: "40px",
                 height: "40px",
                 borderRadius: "14px",
-                background: ui.cardBgStrong,
-                border: ui.borderSubtle,
-                boxShadow: "0 10px 30px rgba(0,0,0,0.35)",
+                background: cardBgStrong,
+                border: borderSubtle,
+                boxShadow: darkMode ? "0 10px 30px rgba(0,0,0,0.35)" : "0 10px 30px rgba(15,23,42,0.08)",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
@@ -374,11 +428,7 @@ function App() {
               <img
                 src="/logo-PRVX-copy.png"
                 alt="PrivacyX Logo"
-                style={{
-                  maxWidth: "26px",
-                  maxHeight: "26px",
-                  display: "block",
-                }}
+                style={{ maxWidth: "26px", maxHeight: "26px", display: "block" }}
               />
             </div>
 
@@ -394,10 +444,11 @@ function App() {
               >
                 PXP-101 : Privacyx Balance Pass (ZK Access)
               </h1>
+
               <p
                 style={{
                   fontSize: "12px",
-                  color: ui.textSecondary,
+                  color: textSecondary,
                   marginTop: "6px",
                   maxWidth: "680px",
                 }}
@@ -413,7 +464,7 @@ function App() {
                   alignItems: "center",
                   gap: "8px",
                   fontSize: "11px",
-                  color: networkOk ? ui.privacyx : "rgba(248,113,113,0.95)",
+                  color: networkOk ? privacyx : "rgba(248,113,113,0.95)",
                 }}
               >
                 <span
@@ -421,7 +472,7 @@ function App() {
                     width: "8px",
                     height: "8px",
                     borderRadius: "999px",
-                    backgroundColor: networkOk ? ui.privacyx : "rgba(248,113,113,0.95)",
+                    backgroundColor: networkOk ? privacyx : "rgba(248,113,113,0.95)",
                   }}
                 />
                 <span>{networkLabel}</span>
@@ -429,18 +480,23 @@ function App() {
             </div>
           </div>
 
-          {/* Wallet + links */}
+          {/* Wallet + links + theme toggle */}
           <div
             style={{
               display: "flex",
               flexDirection: "column",
               alignItems: "flex-end",
-              gap: "6px",
+              gap: "8px",
               flexShrink: 0,
               width: "100%",
-              maxWidth: "420px",
+              maxWidth: "520px",
             }}
           >
+            {/* Row 0: Theme toggle (same placement spirit as PXP-102 desktop nav) */}
+            <div style={{ width: "100%", display: "flex", justifyContent: "flex-end" }}>
+              <ThemeToggle darkMode={darkMode} setDarkMode={setDarkMode} />
+            </div>
+
             {/* Row 1: Connect + Etherscan */}
             <div
               style={{
@@ -458,9 +514,9 @@ function App() {
                   borderRadius: "999px",
                   border: account
                     ? "1px solid rgba(75,239,160,0.35)"
-                    : ui.borderSubtle,
-                  background: account ? "rgba(75,239,160,0.10)" : ui.privacyx,
-                  color: account ? ui.privacyx : ui.privacyxDark,
+                    : borderSubtle,
+                  background: account ? "rgba(75,239,160,0.10)" : privacyx,
+                  color: account ? privacyx : privacyxDark,
                   fontSize: "11px",
                   fontWeight: 600,
                   cursor: "pointer",
@@ -468,6 +524,7 @@ function App() {
                   boxShadow: account
                     ? "none"
                     : "0 10px 30px rgba(75,239,160,0.18)",
+                  transition: "all 150ms ease",
                 }}
               >
                 {account ? shortAddr(account) : "Connect Wallet"}
@@ -482,11 +539,12 @@ function App() {
                     fontSize: "11px",
                     padding: "6px 10px",
                     borderRadius: "999px",
-                    border: ui.borderSubtle,
-                    color: ui.textPrimary,
+                    border: borderSubtle,
+                    color: textPrimary,
                     textDecoration: "none",
-                    background: ui.cardBgStrong,
+                    background: cardBgStrong,
                     whiteSpace: "nowrap",
+                    transition: "all 150ms ease",
                   }}
                 >
                   View contract on Etherscan
@@ -512,11 +570,12 @@ function App() {
                   fontSize: "11px",
                   padding: "6px 10px",
                   borderRadius: "999px",
-                  border: ui.borderSubtle,
-                  color: ui.textPrimary,
+                  border: borderSubtle,
+                  color: textPrimary,
                   textDecoration: "none",
-                  background: ui.cardBgStrong,
+                  background: cardBgStrong,
                   whiteSpace: "nowrap",
+                  transition: "all 150ms ease",
                 }}
               >
                 View PXP-101 spec
@@ -529,12 +588,13 @@ function App() {
                   padding: "6px 10px",
                   borderRadius: "999px",
                   border: "none",
-                  color: ui.privacyxDark,
+                  color: privacyxDark,
                   textDecoration: "none",
-                  background: ui.privacyx,
+                  background: privacyx,
                   fontWeight: 700,
                   whiteSpace: "nowrap",
                   boxShadow: "0 10px 30px rgba(75,239,160,0.16)",
+                  transition: "all 150ms ease",
                 }}
               >
                 Integrate in your dApp
@@ -555,12 +615,13 @@ function App() {
           <div
             style={{
               padding: "16px",
-              borderRadius: ui.radiusLg,
-              background: ui.cardBg,
-              border: ui.borderSubtle,
+              borderRadius: "16px",
+              background: cardBg,
+              border: borderSubtle,
+              transition: "background-color 200ms ease, border-color 200ms ease",
             }}
           >
-            <div style={{ fontSize: "12px", color: ui.textSecondary }}>
+            <div style={{ fontSize: "12px", color: textSecondary }}>
               Merkle Root (on-chain)
             </div>
             <div
@@ -568,7 +629,7 @@ function App() {
                 fontSize: "11px",
                 marginTop: "8px",
                 wordBreak: "break-all",
-                color: ui.textPrimary,
+                color: textPrimary,
               }}
             >
               {currentRoot ? currentRoot.toString() : "—"}
@@ -578,12 +639,13 @@ function App() {
           <div
             style={{
               padding: "16px",
-              borderRadius: ui.radiusLg,
-              background: ui.cardBg,
-              border: ui.borderSubtle,
+              borderRadius: "16px",
+              background: cardBg,
+              border: borderSubtle,
+              transition: "background-color 200ms ease, border-color 200ms ease",
             }}
           >
-            <div style={{ fontSize: "12px", color: ui.textSecondary }}>
+            <div style={{ fontSize: "12px", color: textSecondary }}>
               Required threshold
             </div>
             <div
@@ -591,19 +653,13 @@ function App() {
                 fontSize: "20px",
                 fontWeight: 700,
                 marginTop: "8px",
-                color: ui.privacyx,
+                color: privacyx,
                 letterSpacing: "-0.01em",
               }}
             >
               {threshold ? threshold.toString() : "—"}
             </div>
-            <div
-              style={{
-                fontSize: "11px",
-                color: ui.textSecondary,
-                marginTop: "4px",
-              }}
-            >
+            <div style={{ fontSize: "11px", color: textSecondary, marginTop: "4px" }}>
               (minimum off-chain balance required to qualify)
             </div>
           </div>
@@ -622,9 +678,10 @@ function App() {
           <div
             style={{
               padding: "16px",
-              borderRadius: ui.radiusLg,
-              background: ui.cardBg,
-              border: ui.borderSubtle,
+              borderRadius: "16px",
+              background: cardBg,
+              border: borderSubtle,
+              transition: "background-color 200ms ease, border-color 200ms ease",
             }}
           >
             <h2
@@ -637,26 +694,14 @@ function App() {
             >
               1. Submit your ZK proof
             </h2>
-            <p
-              style={{
-                fontSize: "13px",
-                color: ui.textSecondary,
-                marginBottom: "12px",
-                lineHeight: "1.6",
-              }}
-            >
+
+            <p style={{ fontSize: "13px", color: textSecondary, marginBottom: "12px", lineHeight: "1.6" }}>
               This demo loads a pre-computed proof from{" "}
-              <code style={{ color: ui.textPrimary, opacity: 0.9 }}>
-                /balance_proof.json
-              </code>{" "}
+              <code style={{ color: textPrimary, opacity: 0.9 }}>/balance_proof.json</code>{" "}
               and{" "}
-              <code style={{ color: ui.textPrimary, opacity: 0.9 }}>
-                /balance_public.json
-              </code>
-              , then calls{" "}
-              <code style={{ color: ui.textPrimary, opacity: 0.9 }}>
-                proveAndConsume
-              </code>{" "}
+              <code style={{ color: textPrimary, opacity: 0.9 }}>/balance_public.json</code>,
+              then calls{" "}
+              <code style={{ color: textPrimary, opacity: 0.9 }}>proveAndConsume</code>{" "}
               on the BalanceAccessPass contract.
             </p>
 
@@ -668,18 +713,15 @@ function App() {
                 borderRadius: "999px",
                 border: "none",
                 background:
-                  loading || !account
-                    ? "rgba(148,163,184,0.30)"
-                    : ui.privacyx,
-                color: ui.privacyxDark,
+                  loading || !account ? "rgba(148,163,184,0.30)" : privacyx,
+                color: privacyxDark,
                 fontSize: "13px",
                 fontWeight: 800,
                 cursor: loading || !account ? "not-allowed" : "pointer",
                 marginTop: "6px",
                 boxShadow:
-                  loading || !account
-                    ? "none"
-                    : "0 12px 30px rgba(75,239,160,0.14)",
+                  loading || !account ? "none" : "0 12px 30px rgba(75,239,160,0.14)",
+                transition: "all 150ms ease",
               }}
             >
               {loading
@@ -694,7 +736,7 @@ function App() {
                 style={{
                   marginTop: "12px",
                   fontSize: "13px",
-                  color: status.startsWith("Access") ? ui.privacyx : ui.textPrimary,
+                  color: status.startsWith("Access") ? privacyx : textPrimary,
                 }}
               >
                 {status}
@@ -702,20 +744,13 @@ function App() {
             )}
 
             {txHash && (
-              <div
-                style={{
-                  marginTop: "8px",
-                  fontSize: "11px",
-                  color: ui.textSecondary,
-                  wordBreak: "break-all",
-                }}
-              >
+              <div style={{ marginTop: "8px", fontSize: "11px", color: textSecondary, wordBreak: "break-all" }}>
                 Tx hash:{" "}
                 <a
                   href={`${ETHERSCAN_BASE}/tx/${txHash}`}
                   target="_blank"
                   rel="noreferrer"
-                  style={{ color: ui.textSecondary, textDecoration: "underline" }}
+                  style={{ color: textSecondary, textDecoration: "underline" }}
                 >
                   {txHash}
                 </a>
@@ -723,13 +758,7 @@ function App() {
             )}
 
             {error && (
-              <div
-                style={{
-                  marginTop: "12px",
-                  fontSize: "12px",
-                  color: "rgba(248,113,113,0.95)",
-                }}
-              >
+              <div style={{ marginTop: "12px", fontSize: "12px", color: "rgba(248,113,113,0.95)" }}>
                 ⚠️ {error}
               </div>
             )}
@@ -739,43 +768,22 @@ function App() {
           <div
             style={{
               padding: "16px",
-              borderRadius: ui.radiusLg,
-              background: ui.cardBg,
-              border: ui.borderSubtle,
+              borderRadius: "16px",
+              background: cardBg,
+              border: borderSubtle,
+              transition: "background-color 200ms ease, border-color 200ms ease",
             }}
           >
-            <h2
-              style={{
-                fontSize: "14px",
-                fontWeight: 600,
-                marginBottom: "8px",
-                letterSpacing: "-0.01em",
-              }}
-            >
+            <h2 style={{ fontSize: "14px", fontWeight: 600, marginBottom: "8px", letterSpacing: "-0.01em" }}>
               2. Recent ZK access (on-chain)
             </h2>
-            <p
-              style={{
-                fontSize: "12px",
-                color: ui.textSecondary,
-                marginBottom: "10px",
-                lineHeight: "1.6",
-              }}
-            >
-              Live view of <code style={{ color: ui.textPrimary, opacity: 0.9 }}>
-                AccessGranted
-              </code>{" "}
+            <p style={{ fontSize: "12px", color: textSecondary, marginBottom: "10px", lineHeight: "1.6" }}>
+              Live view of <code style={{ color: textPrimary, opacity: 0.9 }}>AccessGranted</code>{" "}
               events emitted by the BalanceAccessPass contract.
             </p>
 
             {accessEvents.length === 0 && (
-              <div
-                style={{
-                  fontSize: "12px",
-                  color: ui.textMuted,
-                  fontStyle: "italic",
-                }}
-              >
+              <div style={{ fontSize: "12px", color: textMuted, fontStyle: "italic" }}>
                 No access events recorded yet in this session.
               </div>
             )}
@@ -796,46 +804,28 @@ function App() {
                     style={{
                       padding: "8px 10px",
                       borderRadius: "12px",
-                      background: ui.cardBgStrong,
-                      border: ui.borderSubtle,
+                      background: cardBgStrong,
+                      border: borderSubtle,
                       fontSize: "11px",
+                      transition: "background-color 200ms ease, border-color 200ms ease",
                     }}
                   >
-                    <div
-                      style={{
-                        display: "flex",
-                        justifyContent: "space-between",
-                        marginBottom: "4px",
-                      }}
-                    >
-                      <span style={{ color: ui.privacyx, fontWeight: 700 }}>
-                        Access granted
-                      </span>
+                    <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "4px" }}>
+                      <span style={{ color: privacyx, fontWeight: 700 }}>Access granted</span>
                       {ev.blockNumber && (
-                        <span style={{ color: ui.textSecondary }}>
-                          Block #{ev.blockNumber}
-                        </span>
+                        <span style={{ color: textSecondary }}>Block #{ev.blockNumber}</span>
                       )}
                     </div>
-                    <div style={{ color: ui.textSecondary }}>
-                      Caller: {shortAddr(ev.caller)}
-                    </div>
-                    <div style={{ color: ui.textSecondary }}>
-                      Nullifier: {shortHex(ev.nullifier)}
-                    </div>
-                    <div style={{ color: ui.textSecondary }}>
-                      Root: {shortHex(ev.root)}
-                    </div>
+                    <div style={{ color: textSecondary }}>Caller: {shortAddr(ev.caller)}</div>
+                    <div style={{ color: textSecondary }}>Nullifier: {shortHex(ev.nullifier)}</div>
+                    <div style={{ color: textSecondary }}>Root: {shortHex(ev.root)}</div>
                     {ev.txHash && (
                       <div style={{ marginTop: "2px" }}>
                         <a
                           href={`${ETHERSCAN_BASE}/tx/${ev.txHash}`}
                           target="_blank"
                           rel="noreferrer"
-                          style={{
-                            color: ui.textSecondary,
-                            textDecoration: "underline",
-                          }}
+                          style={{ color: textSecondary, textDecoration: "underline" }}
                         >
                           View tx on Etherscan
                         </a>
@@ -854,29 +844,16 @@ function App() {
           style={{
             marginTop: "8px",
             padding: "16px",
-            borderRadius: ui.radiusLg,
-            background: ui.cardBg,
-            border: ui.borderStrong,
+            borderRadius: "16px",
+            background: cardBg,
+            border: borderStrong,
+            transition: "background-color 200ms ease, border-color 200ms ease",
           }}
         >
-          <h2
-            style={{
-              fontSize: "15px",
-              fontWeight: 600,
-              marginBottom: "8px",
-              letterSpacing: "-0.01em",
-            }}
-          >
+          <h2 style={{ fontSize: "15px", fontWeight: 600, marginBottom: "8px", letterSpacing: "-0.01em" }}>
             3. Integration guide (PXP-101)
           </h2>
-          <p
-            style={{
-              fontSize: "13px",
-              color: ui.textSecondary,
-              marginBottom: "10px",
-              lineHeight: "1.6",
-            }}
-          >
+          <p style={{ fontSize: "13px", color: textSecondary, marginBottom: "10px", lineHeight: "1.6" }}>
             Use PXP-101 as a plug-and-play balance-based privacy gate in your dApp or
             protocol. You can start with event-based integration, direct on-chain
             checks, or via the official Privacyx SDK.
@@ -892,21 +869,15 @@ function App() {
           >
             {/* Off-chain */}
             <div>
-              <h3
-                style={{
-                  fontSize: "13px",
-                  fontWeight: 600,
-                  marginBottom: "6px",
-                }}
-              >
-                Option A: Off-chain / backend
+              <h3 style={{ fontSize: "13px", fontWeight: 600, marginBottom: "6px" }}>
+                Option A — Off-chain / backend
               </h3>
               <ul
                 style={{
                   margin: 0,
                   paddingLeft: "16px",
                   fontSize: "12px",
-                  color: ui.textSecondary,
+                  color: textSecondary,
                   display: "flex",
                   flexDirection: "column",
                   gap: "4px",
@@ -919,56 +890,39 @@ function App() {
                     href="https://pass.privacyx.tech"
                     target="_blank"
                     rel="noreferrer"
-                    style={{ color: ui.textPrimary, textDecoration: "underline" }}
+                    style={{ color: textPrimary, textDecoration: "underline" }}
                   >
                     pass.privacyx.tech
                   </a>
                   .
                 </li>
                 <li>
-                  Monitor <code style={{ color: ui.textPrimary, opacity: 0.9 }}>
-                    AccessGranted
-                  </code>{" "}
+                  Monitor <code style={{ color: textPrimary, opacity: 0.9 }}>AccessGranted</code>{" "}
                   events on{" "}
-                  <code style={{ color: ui.textPrimary, opacity: 0.9 }}>
+                  <code style={{ color: textPrimary, opacity: 0.9 }}>
                     0x8333b589ad3A8A5fCe735631e8EDf693C6AE0472
                   </code>
                   .
                 </li>
                 <li>
-                  Use <code style={{ color: ui.textPrimary, opacity: 0.9 }}>
-                    caller
-                  </code>
-                  ,{" "}
-                  <code style={{ color: ui.textPrimary, opacity: 0.9 }}>
-                    nullifier
-                  </code>
-                  , and{" "}
-                  <code style={{ color: ui.textPrimary, opacity: 0.9 }}>
-                    root
-                  </code>{" "}
-                  as inputs to your private access logic.
+                  Use <code style={{ color: textPrimary, opacity: 0.9 }}>caller</code>,{" "}
+                  <code style={{ color: textPrimary, opacity: 0.9 }}>nullifier</code>, and{" "}
+                  <code style={{ color: textPrimary, opacity: 0.9 }}>root</code> as inputs to your private access logic.
                 </li>
               </ul>
             </div>
 
             {/* On-chain */}
             <div>
-              <h3
-                style={{
-                  fontSize: "13px",
-                  fontWeight: 600,
-                  marginBottom: "6px",
-                }}
-              >
-                Option B: On-chain / contracts
+              <h3 style={{ fontSize: "13px", fontWeight: 600, marginBottom: "6px" }}>
+                Option B — On-chain / contracts
               </h3>
               <ul
                 style={{
                   margin: 0,
                   paddingLeft: "16px",
                   fontSize: "12px",
-                  color: ui.textSecondary,
+                  color: textSecondary,
                   display: "flex",
                   flexDirection: "column",
                   gap: "4px",
@@ -976,75 +930,51 @@ function App() {
                 }}
               >
                 <li>
-                  Consume <code style={{ color: ui.textPrimary, opacity: 0.9 }}>
-                    AccessGranted
-                  </code>{" "}
+                  Consume <code style={{ color: textPrimary, opacity: 0.9 }}>AccessGranted</code>{" "}
                   events or nullifiers as one-time tickets.
                 </li>
                 <li>
-                  Gate features based on “has a valid PXP-101 pass” without
-                  revealing balances.
+                  Gate features based on “has a valid PXP-101 pass” without revealing balances.
                 </li>
                 <li>
-                  Combine PXP-101 with your own on-chain logic or off-chain
-                  checks (rate limits, allowlists, etc.).
+                  Combine PXP-101 with your own on-chain logic or off-chain checks (rate limits, allowlists, etc.).
                 </li>
               </ul>
             </div>
 
             {/* SDK */}
             <div>
-              <h3
-                style={{
-                  fontSize: "13px",
-                  fontWeight: 600,
-                  marginBottom: "6px",
-                }}
-              >
-                Option C: Via Privacyx SDK
+              <h3 style={{ fontSize: "13px", fontWeight: 600, marginBottom: "6px" }}>
+                Option C — Via Privacyx SDK
               </h3>
-              <p
-                style={{
-                  fontSize: "12px",
-                  color: ui.textSecondary,
-                  marginBottom: "6px",
-                  lineHeight: "1.6",
-                }}
-              >
-                Install the official SDK to read PXP-101 state and submit proofs
-                with a simple API:
+              <p style={{ fontSize: "12px", color: textSecondary, marginBottom: "6px", lineHeight: "1.6" }}>
+                Install the official SDK to read PXP-101 state and submit proofs with a simple API:
               </p>
               <pre
                 style={{
                   fontSize: "11px",
-                  background: ui.cardBgStrong,
+                  background: cardBgStrong,
                   borderRadius: "14px",
                   padding: "10px",
                   overflowX: "auto",
-                  border: ui.borderSubtle,
+                  border: borderSubtle,
                   margin: 0,
                 }}
               >
                 <code>npm install privacyx-sdk ethers</code>
               </pre>
-              <p
-                style={{
-                  fontSize: "12px",
-                  color: ui.textSecondary,
-                  marginTop: "8px",
-                  marginBottom: "6px",
-                }}
-              >
+
+              <p style={{ fontSize: "12px", color: textSecondary, marginTop: "8px", marginBottom: "6px" }}>
                 Basic usage (Node / dApp):
               </p>
               <pre
                 style={{
                   fontSize: "11px",
-                  background: ui.cardBgStrong,
+                  background: cardBgStrong,
                   borderRadius: "14px",
                   padding: "10px",
                   overflowX: "auto",
-                  border: ui.borderSubtle,
+                  border: borderSubtle,
                   margin: 0,
                 }}
               >
@@ -1075,21 +1005,10 @@ const thr = await px.balancePass.getThreshold();`}</code>
               flexWrap: "wrap",
             }}
           >
-            <span
-              style={{
-                fontSize: "11px",
-                color: ui.textMuted,
-              }}
-            >
+            <span style={{ fontSize: "11px", color: textMuted }}>
               Full specification: PXP-101 · Privacyx Balance Pass.
             </span>
-            <div
-              style={{
-                display: "flex",
-                gap: "8px",
-                flexWrap: "wrap",
-              }}
-            >
+            <div style={{ display: "flex", gap: "8px", flexWrap: "wrap" }}>
               <a
                 href="https://github.com/Privacyx-org/privacyx-balance-pass"
                 target="_blank"
@@ -1098,10 +1017,10 @@ const thr = await px.balancePass.getThreshold();`}</code>
                   fontSize: "11px",
                   padding: "6px 10px",
                   borderRadius: "999px",
-                  border: ui.borderSubtle,
-                  color: ui.textPrimary,
+                  border: borderSubtle,
+                  color: textPrimary,
                   textDecoration: "none",
-                  background: ui.cardBgStrong,
+                  background: cardBgStrong,
                 }}
               >
                 View PXP-101 repo
@@ -1115,9 +1034,9 @@ const thr = await px.balancePass.getThreshold();`}</code>
                   padding: "6px 10px",
                   borderRadius: "999px",
                   border: "none",
-                  color: ui.privacyxDark,
+                  color: privacyxDark,
                   textDecoration: "none",
-                  background: ui.privacyx,
+                  background: privacyx,
                   fontWeight: 700,
                   boxShadow: "0 10px 30px rgba(75,239,160,0.16)",
                 }}
@@ -1128,22 +1047,24 @@ const thr = await px.balancePass.getThreshold();`}</code>
           </div>
         </div>
 
-        {/* Small footer (visual parity with PXP-102) */}
+        {/* Footer */}
         <div
           style={{
             marginTop: "18px",
             paddingTop: "12px",
-            borderTop: ui.borderSubtle,
+            borderTop: borderSubtle,
             display: "flex",
             flexWrap: "wrap",
             gap: "8px",
             justifyContent: "space-between",
             fontSize: "11px",
-            color: ui.textMuted,
+            color: textMuted,
           }}
         >
           <span>Privacyx · Identity layer for Web3 anonymity.</span>
-          <span style={{ opacity: 0.9 }}>PXP-101 · Balance pass · mainnet primitive</span>
+          <span style={{ opacity: 0.9 }}>
+            PXP-101 · Balance pass · mainnet primitive
+          </span>
         </div>
       </div>
     </div>
